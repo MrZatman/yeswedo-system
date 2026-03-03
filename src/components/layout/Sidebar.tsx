@@ -13,8 +13,12 @@ import {
   BarChart,
   Settings,
   LogOut,
+  Store,
+  ChevronDown,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useState, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
 
 const navItems = [
   { href: '/', label: 'My Work Today', icon: LayoutDashboard },
@@ -28,12 +32,40 @@ const navItems = [
   { href: '/reports', label: 'Reports', icon: BarChart },
 ]
 
-interface SidebarProps {
-  userName?: string
+interface UserStore {
+  store_id: string
+  store: {
+    id: string
+    name: string
+  }
 }
 
-export function Sidebar({ userName = 'User' }: SidebarProps) {
+interface SidebarProps {
+  userName?: string
+  stores?: UserStore[]
+  currentStoreId?: string
+}
+
+export function Sidebar({ userName = 'User', stores = [], currentStoreId }: SidebarProps) {
   const pathname = usePathname()
+  const [storeMenuOpen, setStoreMenuOpen] = useState(false)
+  const [isPending, startTransition] = useTransition()
+  const router = useRouter()
+
+  const currentStore = stores.find(s => s.store_id === currentStoreId)
+  const hasMultipleStores = stores.length > 1
+
+  const handleStoreChange = (storeId: string) => {
+    setStoreMenuOpen(false)
+    startTransition(async () => {
+      await fetch('/api/store/switch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ storeId }),
+      })
+      router.refresh()
+    })
+  }
 
   return (
     <aside className="w-64 bg-[#8B3A3A] text-white flex flex-col min-h-screen">
@@ -41,6 +73,40 @@ export function Sidebar({ userName = 'User' }: SidebarProps) {
         <h1 className="text-xl font-bold flex items-center gap-2">
           <span className="text-2xl">☰</span> MENU
         </h1>
+
+        {hasMultipleStores && currentStore && (
+          <div className="mt-4 relative">
+            <button
+              onClick={() => setStoreMenuOpen(!storeMenuOpen)}
+              disabled={isPending}
+              className="flex items-center gap-2 w-full px-3 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors"
+            >
+              <Store className="h-4 w-4" />
+              <span className="flex-1 text-left text-sm truncate">
+                {currentStore.store.name}
+              </span>
+              <ChevronDown className={cn("h-4 w-4 transition-transform", storeMenuOpen && "rotate-180")} />
+            </button>
+
+            {storeMenuOpen && (
+              <div className="absolute top-full left-0 right-0 mt-1 bg-[#722F2F] rounded-lg shadow-lg z-50 overflow-hidden">
+                {stores.map((userStore) => (
+                  <button
+                    key={userStore.store_id}
+                    onClick={() => handleStoreChange(userStore.store_id)}
+                    className={cn(
+                      "w-full px-3 py-2 text-left text-sm hover:bg-white/10 transition-colors",
+                      userStore.store_id === currentStoreId && "bg-white/20"
+                    )}
+                  >
+                    {userStore.store.name}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
         <p className="text-sm mt-4">Hey {userName}!</p>
         <p className="text-xs opacity-80">Here&apos;s how things are going...</p>
       </div>
