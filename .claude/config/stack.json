@@ -1,0 +1,64 @@
+{
+  "project": {
+    "name": "yeswedo-system",
+    "description": "Sistema de gestión para barberías/salones - Migración de legacy PHP",
+    "type": "web-app",
+    "architecture": "multi-tenant-simple"
+  },
+  "stack": {
+    "frontend": {
+      "framework": "next",
+      "version": "15",
+      "router": "app",
+      "react": "19",
+      "typescript": true,
+      "styling": "tailwind-v4",
+      "ui_library": "shadcn-ui",
+      "state": "zustand",
+      "forms": "react-hook-form",
+      "validation": "zod",
+      "icons": "lucide-react",
+      "dates": "date-fns"
+    },
+    "backend": {
+      "platform": "supabase",
+      "database": "postgresql",
+      "auth": "supabase-auth",
+      "storage": "supabase-storage",
+      "realtime": "supabase-realtime",
+      "functions": "supabase-edge-functions"
+    },
+    "payments": {
+      "providers": ["stripe", "square", "mercadopago", "paypal"],
+      "primary": "stripe",
+      "recurring": true
+    },
+    "deployment": {
+      "platform": "vercel",
+      "repo": "github",
+      "ci_cd": "github-actions",
+      "environments": ["development", "staging", "production"]
+    },
+    "testing": {
+      "unit": "vitest",
+      "e2e": "playwright",
+      "coverage_target": 80
+    }
+  },
+  "features": {
+    "multi_store": true,
+    "roles": ["super_admin", "store_manager", "staff"],
+    "modules": [
+      "dashboard",
+      "clients",
+      "memberships",
+      "appointments",
+      "clock",
+      "users",
+      "products",
+      "services",
+      "reports",
+      "settings"
+    ]
+  }
+}

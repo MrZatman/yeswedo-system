@@ -1,0 +1,64 @@
+{
+  "phases": [
+    {
+      "phase": 1,
+      "name": "Foundation",
+      "priority": "critical",
+      "tasks": [
+        "Setup Next.js 15 project with TypeScript",
+        "Configure Supabase project",
+        "Design database schema",
+        "Implement authentication flow",
+        "Setup multi-tenant store selector",
+        "Create base UI components (shadcn)"
+      ]
+    },
+    {
+      "phase": 2,
+      "name": "Core Modules",
+      "priority": "high",
+      "tasks": [
+        "Users module (CRUD, roles)",
+        "Clients module (CRUD, search)",
+        "Services catalog",
+        "Products inventory"
+      ]
+    },
+    {
+      "phase": 3,
+      "name": "Business Logic",
+      "priority": "high",
+      "tasks": [
+        "Memberships module (plans, pricing)",
+        "Appointments module (booking, calendar)",
+        "Clock In/Out module",
+        "Dashboard (My Work Today)"
+      ]
+    },
+    {
+      "phase": 4,
+      "name": "Payments",
+      "priority": "medium",
+      "tasks": [
+        "Stripe integration",
+        "Square integration",
+        "Mercado Pago integration",
+        "PayPal integration",
+        "Recurring billing for memberships"
+      ]
+    },
+    {
+      "phase": 5,
+      "name": "Reports & Polish",
+      "priority": "medium",
+      "tasks": [
+        "Reports module",
+        "Settings module",
+        "Email notifications",
+        "SMS reminders (optional)",
+        "Performance optimization"
+      ]
+    }
+  ],
+  "current_phase": 1
+}

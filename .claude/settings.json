@@ -1,0 +1,72 @@
+{
+  "project": {
+    "name": "yeswedo-system",
+    "version": "2.0.0",
+    "description": "Sistema de gestión para barberías/salones"
+  },
+  "conventions": {
+    "commits": "conventional",
+    "branches": {
+      "main": "production",
+      "staging": "pre-production",
+      "develop": "development",
+      "feature": "feature/*",
+      "fix": "fix/*"
+    },
+    "code_style": {
+      "semicolons": false,
+      "quotes": "single",
+      "indent": 2,
+      "trailing_comma": "es5"
+    }
+  },
+  "agents": {
+    "default_order": [
+      "research",
+      "code",
+      "test",
+      "review",
+      "deploy"
+    ],
+    "specialists": [
+      "supabase-agent",
+      "frontend-agent",
+      "auth-agent",
+      "payments-agent",
+      "appointments-agent",
+      "clients-agent",
+      "memberships-agent",
+      "clock-agent",
+      "reports-agent",
+      "qa-agent"
+    ]
+  },
+  "skills": [
+    "supabase-patterns",
+    "form-patterns",
+    "table-patterns"
+  ],
+  "commands": [
+    "new-module",
+    "new-feature"
+  ],
+  "teams": [
+    "research",
+    "code",
+    "test",
+    "review",
+    "deploy"
+  ],
+  "quality": {
+    "typescript_strict": true,
+    "no_any": true,
+    "max_function_lines": 50,
+    "max_component_lines": 200,
+    "test_coverage_min": 80
+  },
+  "security": {
+    "rls_required": true,
+    "zod_validation": true,
+    "env_for_secrets": true
+  }
+}
