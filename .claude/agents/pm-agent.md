@@ -12,91 +12,79 @@ Si no sabes algo, toma la decisión más razonable y continúa. El usuario NO qu
 
 ### ✅ FASE 1 COMPLETADA - Core Modules
 
-Todos los módulos core han sido implementados:
-
 - [x] Setup Next.js 15 + TypeScript
 - [x] Supabase configurado (auth, DB, RLS)
-- [x] Schema de base de datos (12 tablas)
 - [x] Autenticación (login/logout)
-- [x] Dashboard con sidebar
-- [x] 3 stores creadas (Edgemere, Resler, Zaragosa)
-- [x] Servicios y planes de membresía seed
-- [x] **Módulo Clients** - CRUD, búsqueda, detalle
-- [x] **Módulo Services** - CRUD, toggle active, categorías
-- [x] **Módulo Products** - CRUD, stock, alertas low stock
-- [x] **Módulo Staff** - Invitar, roles, activar/desactivar
-- [x] **Módulo Memberships** - Planes CRUD, beneficios
-- [x] **Módulo Clock In/Out** - Timer, breaks, historial
-- [x] **Módulo Appointments** - Booking, status workflow
-- [x] **Módulo Reports** - Stats, top services, staff performance
+- [x] Dashboard con sidebar y store selector
+- [x] **Clients** - CRUD, búsqueda, detalle
+- [x] **Services** - CRUD, toggle active
+- [x] **Products** - CRUD, stock, alertas
+- [x] **Staff** - Invitar, roles
+- [x] **Memberships** - Planes CRUD
+- [x] **Clock In/Out** - Timer, breaks
+- [x] **Appointments** - Booking, status workflow
+- [x] **Reports** - Stats, performance
 
-### Rutas Disponibles
+### ✅ FASE 2 EN PROGRESO - Mejoras
 
-| Ruta | Descripción |
-|------|-------------|
-| `/` | Dashboard principal |
-| `/clients` | Base de datos de clientes |
-| `/clients/[id]` | Detalle de cliente |
-| `/services` | Gestión de servicios |
-| `/products` | Inventario de productos |
-| `/staff` | Gestión de equipo |
-| `/memberships` | Planes de membresía |
-| `/clock` | Control de asistencia |
-| `/appointments` | Sistema de citas |
-| `/reports` | Reportes y métricas |
+- [x] **Store Selector** - Cambiar entre tiendas
+- [x] **Settings Page** - Profile y store settings
+- [x] **Client Memberships** - Asignar membresías a clientes
+- [ ] **Dashboard mejorado** - Stats reales integrados
 
-### 🔄 FASE 2 - Mejoras (Backlog Futuro)
+### 📋 BACKLOG FUTURO
 
-Cuando el usuario solicite más features:
+1. Transactions/POS - Sistema de cobro
+2. Payment Integrations - Stripe, Square
+3. Email Notifications - Confirmaciones
+4. SMS Reminders - Via Twilio
+5. Calendar View - Vista de calendario
+6. Export Reports - PDF/Excel
+7. Mobile Responsive - Optimización
 
-1. **Store Selector** - Cambiar entre tiendas en el header
-2. **Client Memberships** - Asignar membresías a clientes
-3. **Transactions/POS** - Sistema de cobro
-4. **Payment Integrations** - Stripe, Square, Mercado Pago
-5. **Email Notifications** - Confirmaciones de cita
-6. **SMS Reminders** - Via Twilio
-7. **Calendar View** - Vista de calendario para citas
-8. **Export Reports** - PDF/Excel
-9. **Settings Page** - Configuración de tienda
-10. **Mobile Responsive** - Optimización móvil
+## Rutas Disponibles
+
+| Ruta | Estado |
+|------|--------|
+| `/` | ✅ Dashboard con stats |
+| `/clients` | ✅ CRUD completo |
+| `/clients/[id]` | ✅ Detalle + memberships |
+| `/services` | ✅ CRUD completo |
+| `/products` | ✅ Inventario |
+| `/staff` | ✅ Gestión equipo |
+| `/memberships` | ✅ Planes |
+| `/clock` | ✅ Asistencia |
+| `/appointments` | ✅ Citas |
+| `/reports` | ✅ Métricas |
+| `/settings` | ✅ Configuración |
 
 ## Patrones Establecidos
 
-### Server Action Pattern
+### Server Action
 ```ts
 'use server'
 const result = schema.safeParse(raw)
-if (!result.success) {
-  return { error: result.error.issues[0].message }
-}
-// ... supabase operation
-revalidatePath('/...')
+if (!result.success) return { error: result.error.issues[0].message }
+revalidatePath('/')
 return { data }
 ```
 
-### Form Pattern (sin React Hook Form)
+### Form Pattern
 ```tsx
-const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+const handleSubmit = (e) => {
   e.preventDefault()
   const formData = new FormData(e.currentTarget)
   startTransition(async () => {
-    const result = await createAction(formData)
+    const result = await action(formData)
     if (result.error) { alert(result.error); return }
-    onSuccess?.()
     router.refresh()
   })
 }
 ```
 
-### Estilos
-- Color primario: `#8B3A3A`
-- UI: shadcn/ui
-- Badges para estados
-- Tables con search y actions dropdown
+## Siguiente Acción
 
-## Comando para el Agente
-
-1. Leer este archivo
-2. Si hay módulos pendientes, implementar el siguiente
-3. Si todo está completo, esperar instrucciones o sugerir mejoras de Fase 2
-4. **NUNCA PREGUNTAR AL USUARIO**
+Continuar con el backlog futuro cuando el usuario lo solicite:
+1. POS/Transactions system
+2. Payment processor integrations
+3. Notification system
