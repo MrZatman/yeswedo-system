@@ -5,8 +5,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { getClient } from '@/actions/clients'
+import { getActiveClientMembership } from '@/actions/client-memberships'
 import { ClientModal } from '@/components/clients/ClientModal'
-import { ArrowLeft, Mail, Phone, MapPin, Calendar, CreditCard } from 'lucide-react'
+import { ClientMembershipCard } from '@/components/clients/ClientMembershipCard'
+import { ArrowLeft, Mail, Phone, MapPin, Calendar } from 'lucide-react'
 import Link from 'next/link'
 
 export default async function ClientDetailPage({
@@ -47,7 +49,43 @@ export default async function ClientDetailPage({
     notFound()
   }
 
+  // Get client membership
+  const membership = await getActiveClientMembership(id)
+
+  // Get client's appointments (visit history)
+  const { data: appointments } = await supabase
+    .from('appointments')
+    .select(`
+      id,
+      date,
+      start_time,
+      total,
+      status,
+      services,
+      staff:users(name)
+    `)
+    .eq('client_id', id)
+    .eq('status', 'completed')
+    .order('date', { ascending: false })
+    .limit(10)
+
   const userName = profile?.name || user.email?.split('@')[0] || 'User'
+
+  const formatDate = (dateStr: string) => {
+    return new Date(dateStr + 'T00:00:00').toLocaleDateString([], {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    })
+  }
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(amount)
+  }
 
   return (
     <div className="flex min-h-screen">
@@ -110,23 +148,13 @@ export default async function ClientDetailPage({
             </CardContent>
           </Card>
 
-          <Card className="lg:col-span-2">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <CreditCard className="h-5 w-5" />
-                Membership
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-8 text-gray-500">
-                <Badge variant="outline" className="mb-2">No active membership</Badge>
-                <p className="text-sm">This client doesn&apos;t have an active membership plan.</p>
-                <Button className="mt-4 bg-[#8B3A3A] hover:bg-[#722F2F]">
-                  Assign Membership
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="lg:col-span-2">
+            <ClientMembershipCard
+              clientId={id}
+              storeId={userStore.store_id}
+              membership={membership}
+            />
+          </div>
 
           <Card className="lg:col-span-3">
             <CardHeader>
@@ -136,9 +164,32 @@ export default async function ClientDetailPage({
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-center py-8 text-gray-500">
-                <p>No visits recorded yet.</p>
-              </div>
+              {!appointments || appointments.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">
+                  <p>No visits recorded yet.</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {appointments.map((apt) => {
+                    const staff = Array.isArray(apt.staff) ? apt.staff[0] : apt.staff
+                    const services = apt.services as { name: string }[]
+                    return (
+                      <div key={apt.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div>
+                          <p className="font-medium">{formatDate(apt.date)}</p>
+                          <p className="text-sm text-gray-500">
+                            {services.map(s => s.name).join(', ') || 'No services'} • by {staff?.name ?? 'Staff'}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-medium">{formatCurrency(apt.total)}</p>
+                          <Badge className="bg-green-100 text-green-800">Completed</Badge>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
