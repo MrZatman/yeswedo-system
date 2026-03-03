@@ -220,6 +220,59 @@ export interface Database {
           deleted_at?: string | null
         }
       }
+      products: {
+        Row: {
+          id: string
+          store_id: string
+          name: string
+          description: string | null
+          sku: string | null
+          price: number
+          cost: number | null
+          quantity_in_stock: number
+          low_stock_threshold: number
+          category: string | null
+          image_url: string | null
+          is_active: boolean
+          created_at: string
+          updated_at: string
+          deleted_at: string | null
+        }
+        Insert: {
+          id?: string
+          store_id: string
+          name: string
+          description?: string | null
+          sku?: string | null
+          price: number
+          cost?: number | null
+          quantity_in_stock?: number
+          low_stock_threshold?: number
+          category?: string | null
+          image_url?: string | null
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+          deleted_at?: string | null
+        }
+        Update: {
+          id?: string
+          store_id?: string
+          name?: string
+          description?: string | null
+          sku?: string | null
+          price?: number
+          cost?: number | null
+          quantity_in_stock?: number
+          low_stock_threshold?: number
+          category?: string | null
+          image_url?: string | null
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+          deleted_at?: string | null
+        }
+      }
       appointments: {
         Row: {
           id: string
@@ -333,5 +386,6 @@ export type User = Database['public']['Tables']['users']['Row']
 export type UserStore = Database['public']['Tables']['user_stores']['Row']
 export type Client = Database['public']['Tables']['clients']['Row']
 export type Service = Database['public']['Tables']['services']['Row']
+export type Product = Database['public']['Tables']['products']['Row']
 export type Appointment = Database['public']['Tables']['appointments']['Row']
 export type ClockRecord = Database['public']['Tables']['clock_records']['Row']
