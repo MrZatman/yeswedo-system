@@ -273,6 +273,62 @@ export interface Database {
           deleted_at?: string | null
         }
       }
+      membership_plans: {
+        Row: {
+          id: string
+          store_id: string
+          name: string
+          shortcode: string
+          description: string | null
+          price: number
+          currency: string
+          billing_period: 'monthly' | 'yearly'
+          haircuts_included: number
+          services_included: string[]
+          discount_percentage: number
+          is_active: boolean
+          sort_order: number
+          stripe_price_id: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          store_id: string
+          name: string
+          shortcode: string
+          description?: string | null
+          price: number
+          currency?: string
+          billing_period?: 'monthly' | 'yearly'
+          haircuts_included?: number
+          services_included?: string[]
+          discount_percentage?: number
+          is_active?: boolean
+          sort_order?: number
+          stripe_price_id?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          store_id?: string
+          name?: string
+          shortcode?: string
+          description?: string | null
+          price?: number
+          currency?: string
+          billing_period?: 'monthly' | 'yearly'
+          haircuts_included?: number
+          services_included?: string[]
+          discount_percentage?: number
+          is_active?: boolean
+          sort_order?: number
+          stripe_price_id?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
       appointments: {
         Row: {
           id: string
@@ -387,5 +443,6 @@ export type UserStore = Database['public']['Tables']['user_stores']['Row']
 export type Client = Database['public']['Tables']['clients']['Row']
 export type Service = Database['public']['Tables']['services']['Row']
 export type Product = Database['public']['Tables']['products']['Row']
+export type MembershipPlan = Database['public']['Tables']['membership_plans']['Row']
 export type Appointment = Database['public']['Tables']['appointments']['Row']
 export type ClockRecord = Database['public']['Tables']['clock_records']['Row']

@@ -21,7 +21,7 @@ const navItems = [
   { href: '/clients', label: 'Clients Database', icon: Users },
   { href: '/products', label: 'Products', icon: Package },
   { href: '/services', label: 'Services', icon: Scissors },
-  { href: '/users', label: 'Users', icon: Users },
+  { href: '/staff', label: 'Staff', icon: Users },
   { href: '/memberships', label: 'Memberships', icon: CreditCard },
   { href: '/clock', label: 'Clock In & Out', icon: Clock },
   { href: '/appointments', label: 'Appointments', icon: Calendar },
